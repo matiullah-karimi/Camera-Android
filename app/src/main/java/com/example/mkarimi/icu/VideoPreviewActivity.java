@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.VideoView;
+
+
 public class VideoPreviewActivity extends AppCompatActivity {
 
     private VideoView videoView;

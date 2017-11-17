@@ -1,6 +1,7 @@
 package com.example.mkarimi.icu;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +25,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
@@ -31,8 +35,12 @@ import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.SessionType;
 import com.otaliastudios.cameraview.Size;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -52,29 +60,20 @@ public class MainActivity extends AppCompatActivity
     private long mCaptureTime;
     private File mediaStorageDir;
 
+    private ImageButton stopVideo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+        final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
-        mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
-        // Select output file. Make sure you have write permissions.
-        File file =  new File(mediaStorageDir.getPath() + File.separator
-                + "VID_" + timeStamp + ".mp4");
+//        // Select output file. Make sure you have write permissions.
+//        File file =  new File(mediaStorageDir.getPath() + File.separator
+//                + "VID_" + timeStamp + ".mp4");
 
-        int storagePermissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (storagePermissionCheck != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    WRITE_EXTERNAL_STORAGE_CODE);
-        }
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         camera.addCameraListener(new CameraListener() {
             public void onCameraOpened(CameraOptions options) { onOpened(); }
             public void onPictureTaken(byte[] jpeg) { onPicture(jpeg); }
-            public void onVideoTaken(File video) { onVideo(video); }
+            public void onVideoTaken(File video) { onVideo(video);}
         });
 
 
@@ -95,6 +94,8 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.capturePhoto).setOnClickListener(this);
         findViewById(R.id.captureVideo).setOnClickListener(this);
         findViewById(R.id.toggleCamera).setOnClickListener(this);
+        stopVideo = findViewById(R.id.stopVideo);
+        stopVideo.setOnClickListener(this);
 
         controlPanel = findViewById(R.id.controls);
         ViewGroup group = (ViewGroup) controlPanel.getChildAt(0);
@@ -221,6 +222,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.capturePhoto: capturePhoto(); break;
             case R.id.captureVideo: captureVideo(); break;
             case R.id.toggleCamera: toggleCamera(); break;
+            case R.id.stopVideo: stopCapturingVideo();break;
         }
     }
 
@@ -240,23 +242,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void capturePhoto() {
-        if (mCapturingPicture) return;
-        mCapturingPicture = true;
-        mCaptureTime = System.currentTimeMillis();
-        mCaptureNativeSize = camera.getPictureSize();
-        message("Capturing picture...", false);
-        camera.capturePicture();
+        if (checkAndRequestPermissions()){
+            if (mCapturingPicture) return;
+            mCapturingPicture = true;
+            mCaptureTime = System.currentTimeMillis();
+            mCaptureNativeSize = camera.getPictureSize();
+            message("Capturing picture...", false);
+            camera.capturePicture();
+        }
     }
 
     private void captureVideo() {
-        if (camera.getSessionType() != SessionType.VIDEO) {
-            message("Can't record video while session type is 'picture'.", false);
-            return;
+        if(checkAndRequestPermissions()){
+            if (camera.getSessionType() != SessionType.VIDEO) {
+                message("Can't record video while session type is 'picture'.", false);
+                return;
+            }
+
+            if (mCapturingPicture || mCapturingVideo) return;
+
+            mCapturingVideo = true;
+
+            final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault()).format(new Date());
+
+            File folder = new File(Environment.getExternalStorageDirectory().toString()+"/ICU/Videos");
+            folder.mkdirs();
+
+            //Save the path as a string value
+            String extStorageDirectory = folder.toString();
+
+            mediaStorageDir = new File(extStorageDirectory,"VID_" + timeStamp + ".mp4");
+            camera.startCapturingVideo(mediaStorageDir);
+            stopVideo.setVisibility(View.VISIBLE);
         }
-        if (mCapturingPicture || mCapturingVideo) return;
-        mCapturingVideo = true;
-        message("Recording for 1 hour...", true);
-        camera.startCapturingVideo(mediaStorageDir, 5000);
+        else {
+            message("You have not grant privlige", true);
+        }
     }
 
     private void toggleCamera() {
@@ -323,6 +345,27 @@ public class MainActivity extends AppCompatActivity
 
     public void stopCapturingVideo(){
         camera.stopCapturingVideo();
+    }
+
+    private  boolean checkAndRequestPermissions() {
+        int storage = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int read = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (storage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (read != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (!listPermissionsNeeded.isEmpty())
+        {
+            ActivityCompat.requestPermissions(this,listPermissionsNeeded.toArray
+                    (new String[listPermissionsNeeded.size()]),1);
+            return false;
+        }
+        return true;
     }
 
     //endregion
