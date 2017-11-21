@@ -54,18 +54,6 @@
         android:weightSum="3">
 
         <ImageButton
-            android:id="@+id/edit"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/background"
-            app:srcCompat="@drawable/ic_edit" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <ImageButton
             android:id="@+id/capturePhoto"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -95,10 +83,10 @@
             android:layout_height="56dp"
             android:background="@drawable/background"
             app:srcCompat="@android:drawable/ic_media_pause"
-            android:visibility="gone"/>
+            />
 
         <Space
-            android:layout_width="0dp"
+            android:layout_width="10dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
 

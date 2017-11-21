@@ -1,5 +1,6 @@
 package com.example.mkarimi.icu;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.media.MediaPlayer;
@@ -15,6 +16,7 @@ import android.widget.VideoView;
 public class VideoPreviewActivity extends AppCompatActivity {
 
     private VideoView videoView;
+    private String path;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,7 +31,9 @@ public class VideoPreviewActivity extends AppCompatActivity {
         });
         final MessageView actualResolution = findViewById(R.id.actualResolution);
 
-        Uri videoUri = getIntent().getParcelableExtra("video");
+        final Uri videoUri = getIntent().getParcelableExtra("video");
+        path = getIntent().getStringExtra("path");
+
         MediaController controller = new MediaController(this);
         controller.setAnchorView(videoView);
         controller.setMediaPlayer(videoView);
@@ -48,6 +52,15 @@ public class VideoPreviewActivity extends AppCompatActivity {
                 lp.height = (int) (viewWidth * (videoHeight / videoWidth));
                 videoView.setLayoutParams(lp);
                 playVideo();
+            }
+        });
+
+        findViewById(R.id.btnUpload).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UploadFileHelper.uploadMultipart(VideoPreviewActivity.this, path);
+                Intent intent = new Intent(VideoPreviewActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

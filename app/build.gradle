@@ -31,4 +31,5 @@ dependencies {
     def uploadServiceVersion = "3.4.1"
     compile "net.gotev:uploadservice:$uploadServiceVersion"
     compile 'com.github.angads25:filepicker:1.1.1'
+    compile 'com.android.volley:volley:1.0.0'
 }

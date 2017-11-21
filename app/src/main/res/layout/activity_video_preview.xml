@@ -18,7 +18,15 @@
             <VideoView
                 android:id="@+id/video"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="400dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnUpload"
+                android:text="Upload"
+                android:textColor="@color/textColorPrimary"
+                />
 
             <com.example.mkarimi.icu.MessageView
                 android:id="@+id/actualResolution"

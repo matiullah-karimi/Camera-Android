@@ -70,10 +70,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
-//        // Select output file. Make sure you have write permissions.
-//        File file =  new File(mediaStorageDir.getPath() + File.separator
-//                + "VID_" + timeStamp + ".mp4");
-
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -90,11 +86,11 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        findViewById(R.id.edit).setOnClickListener(this);
         findViewById(R.id.capturePhoto).setOnClickListener(this);
         findViewById(R.id.captureVideo).setOnClickListener(this);
         findViewById(R.id.toggleCamera).setOnClickListener(this);
         stopVideo = findViewById(R.id.stopVideo);
+        stopVideo.setEnabled(false);
         stopVideo.setOnClickListener(this);
 
         controlPanel = findViewById(R.id.controls);
@@ -141,6 +137,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            edit();
             return true;
         }
 
@@ -154,18 +151,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            Intent intent = new Intent(this, UploadFile.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+           UploadFileHelper.openFileChooser(MainActivity.this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -213,13 +199,13 @@ public class MainActivity extends AppCompatActivity
         mCapturingVideo = false;
         Intent intent = new Intent(MainActivity.this, VideoPreviewActivity.class);
         intent.putExtra("video", Uri.fromFile(video));
+        intent.putExtra("path", video.getAbsolutePath());
         startActivity(intent);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.edit: edit(); break;
             case R.id.capturePhoto: capturePhoto(); break;
             case R.id.captureVideo: captureVideo(); break;
             case R.id.toggleCamera: toggleCamera(); break;
@@ -275,10 +261,10 @@ public class MainActivity extends AppCompatActivity
 
             mediaStorageDir = new File(extStorageDirectory,"VID_" + timeStamp + ".mp4");
             camera.startCapturingVideo(mediaStorageDir);
-            stopVideo.setVisibility(View.VISIBLE);
+            stopVideo.setEnabled(true);
         }
         else {
-            message("You have not grant privlige", true);
+            message("You have not grant privilige", true);
         }
     }
 
