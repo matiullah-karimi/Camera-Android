@@ -42,60 +42,193 @@
             android:layout_margin="0dp"/>
     </FrameLayout>
 
-
-
-    <!-- Controls -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:padding="16dp"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
-        <ImageButton
-            android:id="@+id/capturePhoto"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/background"
-            app:srcCompat="@drawable/ic_photo" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/dashboard_controls_border"
+            android:padding="10dp"
+            android:weightSum="3"
+            >
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            <ImageButton
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:srcCompat="@android:drawable/ic_media_pause"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible"
+                android:layout_weight="1"/>
 
-        <ImageButton
-            android:id="@+id/captureVideo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/background"
-            app:srcCompat="@drawable/ic_video" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:fontFamily="sans-serif"
+                android:text="Eyes On You"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+        </LinearLayout>
 
-        <ImageButton
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_controls_border"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/btnUpload">
+
+                <ImageButton
+                    android:id="@+id/btnUpload1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:srcCompat="@android:drawable/stat_sys_upload_done"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Upload File"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_controls_border"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/toggleCamera">
+
+                <ImageButton
+                    android:id="@+id/toggleCamera1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:srcCompat="@drawable/ic_switch"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Toggle Camera"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/dashboard_controls_border"
+            android:padding="10dp"
             android:id="@+id/stopVideo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/background"
-            app:srcCompat="@android:drawable/ic_media_pause"
-            />
+            >
 
-        <Space
-            android:layout_width="10dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            <ImageButton
+                android:id="@+id/stopVideo1"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                app:srcCompat="@android:drawable/checkbox_off_background"
+                android:layout_gravity="center_horizontal"/>
 
-        <ImageButton
-            android:id="@+id/toggleCamera"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/background"
-            app:srcCompat="@drawable/ic_switch" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Stop"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_controls_border"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/capturePhoto"
+                >
+
+                <ImageButton
+                    android:id="@+id/capturePhoto1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:srcCompat="@drawable/ic_photo"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Capture Photo"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_controls_border"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/captureVideo"
+                >
+
+                <ImageButton
+                    android:id="@+id/captureVideo1"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    app:srcCompat="@drawable/ic_video"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Record Video"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- Edit -->

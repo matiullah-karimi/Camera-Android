@@ -27,6 +27,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     private long mCaptureTime;
     private File mediaStorageDir;
 
-    private ImageButton stopVideo;
+    private LinearLayout stopVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +88,14 @@ public class MainActivity extends AppCompatActivity
 
 
         findViewById(R.id.capturePhoto).setOnClickListener(this);
+        findViewById(R.id.capturePhoto1).setOnClickListener(this);
         findViewById(R.id.captureVideo).setOnClickListener(this);
+        findViewById(R.id.captureVideo1).setOnClickListener(this);
         findViewById(R.id.toggleCamera).setOnClickListener(this);
+        findViewById(R.id.toggleCamera1).setOnClickListener(this);
+        findViewById(R.id.btnUpload).setOnClickListener(this);
+        findViewById(R.id.btnUpload1).setOnClickListener(this);
+        findViewById(R.id.stopVideo1).setOnClickListener(this);
         stopVideo = findViewById(R.id.stopVideo);
         stopVideo.setEnabled(false);
         stopVideo.setOnClickListener(this);
@@ -151,7 +158,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-           UploadFileHelper.openFileChooser(MainActivity.this);
+            Intent intent = new Intent(MainActivity.this, UploadExtraFile.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -206,10 +214,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.capturePhoto: capturePhoto(); break;
-            case R.id.captureVideo: captureVideo(); break;
-            case R.id.toggleCamera: toggleCamera(); break;
-            case R.id.stopVideo: stopCapturingVideo();break;
+            case R.id.capturePhoto:
+            case R.id.capturePhoto1:
+                capturePhoto(); break;
+            case R.id.captureVideo:
+            case R.id.captureVideo1:
+                captureVideo(); break;
+            case R.id.toggleCamera:
+            case R.id.toggleCamera1:
+                toggleCamera(); break;
+            case R.id.stopVideo:
+            case R.id.stopVideo1:
+                stopCapturingVideo(); break;
+            case R.id.btnUpload:
+            case R.id.btnUpload1:
+                uploadFile(); break;
         }
     }
 
@@ -253,7 +272,7 @@ public class MainActivity extends AppCompatActivity
             final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                     Locale.getDefault()).format(new Date());
 
-            File folder = new File(Environment.getExternalStorageDirectory().toString()+"/ICU/Videos");
+            File folder = new File(Environment.getExternalStorageDirectory().toString()+"/EOY/Videos");
             folder.mkdirs();
 
             //Save the path as a string value
@@ -355,5 +374,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void uploadFile(){
+        Intent intent = new Intent(MainActivity.this, UploadExtraFile.class);
+        startActivity(intent);
+    }
     //endregion
 }

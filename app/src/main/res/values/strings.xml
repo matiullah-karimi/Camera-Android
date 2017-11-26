@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">ICU</string>
+    <string name="app_name">Eyes On U</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_upload_file">UploadFile</string>
+    <string name="title_activity_upload_extra_file">Upload File</string>
 </resources>

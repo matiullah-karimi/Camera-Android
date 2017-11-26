@@ -1,5 +1,6 @@
 package com.example.mkarimi.icu;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.otaliastudios.cameraview.AspectRatio;
@@ -24,6 +26,8 @@ import java.util.Locale;
 public class PicturePreviewActivity extends AppCompatActivity {
     private static WeakReference<byte[]> image;
     private String path;
+    private EditText name, province, district, organization;
+
 
     public static void setImage(@Nullable byte[] im) {
         image = im != null ? new WeakReference<>(im) : null;
@@ -33,11 +37,12 @@ public class PicturePreviewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_preview);
+
         final ImageView imageView = findViewById(R.id.image);
-        final MessageView nativeCaptureResolution = findViewById(R.id.nativeCaptureResolution);
-        // final MessageView actualResolution = findViewById(R.id.actualResolution);
-        // final MessageView approxUncompressedSize = findViewById(R.id.approxUncompressedSize);
-        final MessageView captureLatency = findViewById(R.id.captureLatency);
+        name = findViewById(R.id.name);
+        province = findViewById(R.id.province);
+        district = findViewById(R.id.district);
+        organization = findViewById(R.id.organization);
 
         final long delay = getIntent().getLongExtra("delay", 0);
         final int nativeWidth = getIntent().getIntExtra("nativeWidth", 0);
@@ -53,27 +58,24 @@ public class PicturePreviewActivity extends AppCompatActivity {
             public void onBitmapReady(Bitmap bitmap) {
                 imageView.setImageBitmap(bitmap);
                 saveImage(bitmap);
-                // approxUncompressedSize.setTitle("Approx. uncompressed size");
-                // approxUncompressedSize.setMessage(getApproximateFileMegabytes(bitmap) + "MB");
-
-                captureLatency.setTitle("Approx. capture latency");
-                captureLatency.setMessage(delay + " milliseconds");
-
-                // ncr and ar might be different when cropOutput is true.
-                AspectRatio nativeRatio = AspectRatio.of(nativeWidth, nativeHeight);
-                nativeCaptureResolution.setTitle("Native capture resolution");
-                nativeCaptureResolution.setMessage(nativeWidth + "x" + nativeHeight + " (" + nativeRatio + ")");
-
-                // AspectRatio finalRatio = AspectRatio.of(bitmap.getWidth(), bitmap.getHeight());
-                // actualResolution.setTitle("Actual resolution");
-                // actualResolution.setMessage(bitmap.getWidth() + "x" + bitmap.getHeight() + " (" + finalRatio + ")");
             }
         });
 
         findViewById(R.id.btnUpload).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadFileHelper.uploadMultipart(PicturePreviewActivity.this, path);
+
+                Multipart multipart = new Multipart();
+                multipart.setName(name.getText().toString());
+                multipart.setProvince(province.getText().toString());
+                multipart.setDistrict(district.getText().toString());
+                multipart.setOrganization(organization.getText().toString());
+                multipart.setFile(new File(path));
+
+                UploadFileHelper.uploadMultipart(PicturePreviewActivity.this, multipart);
+//                Intent intent = new Intent(PicturePreviewActivity.this, MainActivity.class);
+//                startActivity(intent);
+
             }
         });
     }
@@ -84,7 +86,7 @@ public class PicturePreviewActivity extends AppCompatActivity {
 
     private void saveImage(Bitmap finalBitmap) {
 
-        File folder = new File(Environment.getExternalStorageDirectory().toString()+"/ICU/Images");
+        File folder = new File(Environment.getExternalStorageDirectory().toString()+"/EOY/Images");
         folder.mkdirs();
 
         //Save the path as a string value

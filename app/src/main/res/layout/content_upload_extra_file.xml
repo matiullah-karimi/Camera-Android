@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.mkarimi.icu.UploadExtraFile"
+    tools:showIn="@layout/activity_upload_extra_file">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:textColor="#0d0c0c"
+            android:layout_margin="20dp"
+            android:textSize="34dp"
+            android:gravity="center_horizontal"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:hint="Name"
+            android:background="@drawable/edit_text_border"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:height="@dimen/edit_text_height" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/province"
+            android:hint="Province"
+            android:background="@drawable/edit_text_border"
+            android:padding="5dp"
+            android:layout_margin="5dp"
+            android:height="@dimen/edit_text_height"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/district"
+            android:hint="District"
+            android:background="@drawable/edit_text_border"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:height="@dimen/edit_text_height"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/organization"
+            android:hint="Organization"
+            android:background="@drawable/edit_text_border"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:height="@dimen/edit_text_height"
+            />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
