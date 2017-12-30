@@ -1,5 +1,6 @@
 package com.example.mkarimi.icu;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,25 +30,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class UploadFileHelper {
     private static FilePickerDialog dialog;
-    private static ProgressDialog progressDialog;
-    private static  String serverUrl = "http://192.168.43.84:8000/api/uploadFile";
+    private static Dialog progressDialog;
+    private static  String serverUrl = "http://eyesonyou.today/api/uploadFile";
     private static AsyncHttpClient client;
-    private static boolean isFileUploaded;
 
     public UploadFileHelper(){
         client = new AsyncHttpClient();
     }
 
-    public static void uploadMultipart(final Context context, Multipart multipart) {
+    public static void uploadMultipart(final Context context, Multipart multipart, JsonHttpResponseHandler handler) {
 
         client = new AsyncHttpClient();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Its uploading....");
-        progressDialog.setTitle("Upload File");
-        progressDialog.setCancelable(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMax(100);
-        progressDialog.show();
 
         RequestParams params = new RequestParams();
 
@@ -61,60 +54,7 @@ public class UploadFileHelper {
         catch (FileNotFoundException ex){
 
         }
-        client.post(serverUrl, params, new JsonHttpResponseHandler(){
-            @Override
-            public void onProgress(long bytesWritten, long totalSize) {
-                super.onProgress(bytesWritten, totalSize);
-                progressDialog.setProgress((int) bytesWritten);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-                message("Successfully uploaded!!!", context);
-                Log.d("tag: ", response.toString());
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                message("Successfully uploaded!!!", context);
-                Log.d("tag: ", response.toString() + isFileUploaded);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                super.onSuccess(statusCode, headers, responseString);
-                message("Successfully uploaded!!!", context);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                message("Uploading failed!!!", context);
-                Log.d("asdfasdf2", responseString + "");
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                message("Uploading failed!!!", context);
-                Log.d("asdfasdf1", isFileUploaded + "");
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                message("Uploading failed!!!", context);
-                Log.d("asdfasdf", errorResponse + "");
-                progressDialog.dismiss();
-            }
-        });
+        client.post(serverUrl, params, handler);
     }
 
     public static void openFileChooser(final Context context){

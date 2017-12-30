@@ -21,6 +21,17 @@
                 android:layout_height="250dp"
                 android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Details"
+                android:textColor="#0d0c0c"
+                android:layout_margin="20dp"
+                android:textSize="34dp"
+                android:gravity="center_horizontal"
+                />
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,13 +41,14 @@
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:height="@dimen/edit_text_height"
+                android:visibility="gone"
                 />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/province"
-                android:hint="Please enter province name"
+                android:hint="Province"
                 android:background="@drawable/edit_text_border"
                 android:padding="5dp"
                 android:layout_margin="5dp"
@@ -47,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/district"
-                android:hint="Please enter distric name"
+                android:hint="Distric"
                 android:background="@drawable/edit_text_border"
                 android:layout_margin="5dp"
                 android:padding="5dp"
@@ -58,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/organization"
-                android:hint="Please enter organization name"
+                android:hint="Organization"
                 android:background="@drawable/edit_text_border"
                 android:layout_margin="5dp"
                 android:padding="5dp"

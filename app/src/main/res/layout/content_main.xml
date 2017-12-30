@@ -149,6 +149,7 @@
             android:background="@drawable/dashboard_controls_border"
             android:padding="10dp"
             android:id="@+id/stopVideo"
+            android:visibility="gone"
             >
 
             <ImageButton
@@ -221,6 +222,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/recordVideoText"
                     android:layout_gravity="center_horizontal"
                     android:text="Record Video"
                     android:textStyle="bold" />

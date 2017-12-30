@@ -1,5 +1,6 @@
 package com.example.mkarimi.icu;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
@@ -10,9 +11,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.otaliastudios.cameraview.AspectRatio;
 import com.otaliastudios.cameraview.CameraUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,11 +29,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.Header;
+
 public class PicturePreviewActivity extends AppCompatActivity {
     private static WeakReference<byte[]> image;
     private String path;
     private EditText name, province, district, organization;
-
+    private Dialog progressDialog;
 
     public static void setImage(@Nullable byte[] im) {
         image = im != null ? new WeakReference<>(im) : null;
@@ -72,10 +80,65 @@ public class PicturePreviewActivity extends AppCompatActivity {
                 multipart.setOrganization(organization.getText().toString());
                 multipart.setFile(new File(path));
 
-                UploadFileHelper.uploadMultipart(PicturePreviewActivity.this, multipart);
-//                Intent intent = new Intent(PicturePreviewActivity.this, MainActivity.class);
-//                startActivity(intent);
+                progressDialog = new Dialog(PicturePreviewActivity.this);
+                progressDialog.setTitle("Upload File");
+                progressDialog.setContentView(R.layout.progress_dialog);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
 
+                UploadFileHelper.uploadMultipart(PicturePreviewActivity.this, multipart,
+                        new JsonHttpResponseHandler(){
+                            @Override
+                            public void onProgress(long bytesWritten, long totalSize) {
+                                super.onProgress(bytesWritten, totalSize);
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                                Log.d("tag: ", response.toString());
+                                progressDialog.dismiss();
+                                showMessage("File successfully uploaded...");
+                                goToMain();
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                progressDialog.dismiss();
+                                showMessage("File successfully uploaded...");
+                                goToMain();
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                progressDialog.dismiss();
+                                showMessage("File successfully uploaded...");
+                                goToMain();
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                showMessage("Upload failed...");
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                progressDialog.dismiss();
+                                showMessage("Upload failed...");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                progressDialog.dismiss();
+                                showMessage("Upload failed...");
+                            }
+                        });
             }
         });
     }
@@ -108,5 +171,14 @@ public class PicturePreviewActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void goToMain(){
+        Intent intent = new Intent(PicturePreviewActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void showMessage(String message){
+        Toast.makeText(PicturePreviewActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }

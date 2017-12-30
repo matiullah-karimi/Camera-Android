@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraLogger;
@@ -62,6 +63,9 @@ public class MainActivity extends AppCompatActivity
     private File mediaStorageDir;
 
     private LinearLayout stopVideo;
+    private ImageButton startVideo;
+    private  LinearLayout startVideoLayout;
+    private TextView recordVideoText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +93,10 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.capturePhoto).setOnClickListener(this);
         findViewById(R.id.capturePhoto1).setOnClickListener(this);
-        findViewById(R.id.captureVideo).setOnClickListener(this);
-        findViewById(R.id.captureVideo1).setOnClickListener(this);
+        startVideoLayout = findViewById(R.id.captureVideo);
+        startVideoLayout.setOnClickListener(this);
+        startVideo = findViewById(R.id.captureVideo1);
+        startVideo.setOnClickListener(this);
         findViewById(R.id.toggleCamera).setOnClickListener(this);
         findViewById(R.id.toggleCamera1).setOnClickListener(this);
         findViewById(R.id.btnUpload).setOnClickListener(this);
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         stopVideo = findViewById(R.id.stopVideo);
         stopVideo.setEnabled(false);
         stopVideo.setOnClickListener(this);
+        recordVideoText = findViewById(R.id.recordVideoText);
 
         controlPanel = findViewById(R.id.controls);
         ViewGroup group = (ViewGroup) controlPanel.getChildAt(0);
@@ -219,13 +226,14 @@ public class MainActivity extends AppCompatActivity
                 capturePhoto(); break;
             case R.id.captureVideo:
             case R.id.captureVideo1:
-                captureVideo(); break;
+                if (mCapturingVideo)
+                    stopCapturingVideo();
+                else
+                    captureVideo();
+                break;
             case R.id.toggleCamera:
             case R.id.toggleCamera1:
                 toggleCamera(); break;
-            case R.id.stopVideo:
-            case R.id.stopVideo1:
-                stopCapturingVideo(); break;
             case R.id.btnUpload:
             case R.id.btnUpload1:
                 uploadFile(); break;
@@ -266,6 +274,9 @@ public class MainActivity extends AppCompatActivity
             }
 
             if (mCapturingPicture || mCapturingVideo) return;
+
+            startVideo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.stop));
+            recordVideoText.setText("Stop Video");
 
             mCapturingVideo = true;
 
@@ -350,6 +361,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void stopCapturingVideo(){
+        mCapturingVideo = false;
+        startVideo.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_video));
+        recordVideoText.setText("Record Video");
         camera.stopCapturingVideo();
     }
 
