@@ -71,6 +71,10 @@ public class UploadExtraFile extends AppCompatActivity {
                         //uploadMultipart(context, files[0]);
                         multipart.setFile(new File(files[0]));
 
+                        if (new File(files[0]).length() > 100 * 1024 * 1024){
+                            showMessage("Can't upload files larger than 100 mb.");
+                        }
+
                         progressDialog = new Dialog(UploadExtraFile.this);
                         progressDialog.setTitle("Upload File");
                         progressDialog.setContentView(R.layout.progress_dialog);

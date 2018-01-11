@@ -35,18 +35,6 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/name"
-                android:hint="Please enter person name"
-                android:background="@drawable/edit_text_border"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:height="@dimen/edit_text_height"
-                android:visibility="gone"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/province"
                 android:hint="Province"
                 android:background="@drawable/edit_text_border"
@@ -75,6 +63,19 @@
                 android:layout_margin="5dp"
                 android:padding="5dp"
                 android:height="@dimen/edit_text_height"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:hint="Details"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:background="@drawable/edit_text_border"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:gravity="top"
                 />
 
             <Button

@@ -83,6 +83,11 @@ public class VideoPreviewActivity extends AppCompatActivity {
             multipart.setOrganization(organization.getText().toString());
             multipart.setFile(new File(path));
 
+            if (new File(path).length() > 100 * 1024 * 1024) {
+                showMessage("Can't upload files larger than 100 mb.");
+                return;
+            }
+
             progressDialog = new Dialog(VideoPreviewActivity.this);
             progressDialog.setTitle("Upload File");
             progressDialog.setContentView(R.layout.progress_dialog);

@@ -26,17 +26,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:hint="Name"
-            android:background="@drawable/edit_text_border"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:height="@dimen/edit_text_height"
-            android:visibility="gone"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/province"
             android:hint="Province"
             android:background="@drawable/edit_text_border"
@@ -64,7 +53,18 @@
             android:background="@drawable/edit_text_border"
             android:layout_margin="5dp"
             android:padding="5dp"
-            android:height="@dimen/edit_text_height"
+            android:height="@dimen/edit_text_height" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:hint="Details"
+            android:lines="2"
+            android:gravity="top"
+            android:background="@drawable/edit_text_border"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             />
     </LinearLayout>
 
